@@ -25,9 +25,9 @@ GM_addStyle('.spendesk-pin-button:hover { cursor: pointer; }');
 
 const DATA_ATTRIBUTE = 'data-pinned';
 const NOT_PINNED_ICON =
-  '<i class="fa fa-star-o fa-2x spendesk-not-fav" role="button"></i>';
+  '<i class="fa fa-star-o fa-2x spendesk-not-pinned" role="button"></i>';
 const PINNED_ICON =
-  '<i class="fa fa-star fa-2x spendesk-fav" role="button"></i>';
+  '<i class="fa fa-star fa-2x spendesk-pinned" role="button"></i>';
 
 const wait = (timeout) =>
   new Promise((resolve) => {
@@ -42,7 +42,7 @@ const getSections = (sidebar) =>
 const getSectionName = (section) =>
   section.querySelector('.c-side-menu-item__name').textContent.trim();
 
-const getIcon = (isPinned) => (isPinned ? FAVORITE_ICON : NOT_FAVORITE_ICON);
+const getIcon = (isPinned) => (isPinned ? PINNED_ICON : NOT_PINNED_ICON);
 
 const getIsButtonCurrentlyPinned = (button) =>
   button.getAttribute(DATA_ATTRIBUTE) === '1';
@@ -90,7 +90,7 @@ const insertPinIcon = async (section) => {
   const button = document.createElement('button');
   section.style.position = 'relative';
   button.type = 'button';
-  button.classList.add('spendesk-fav-button');
+  button.classList.add('spendesk-pin-button');
   button.addEventListener('click', togglePin);
 
   const name = getSectionName(section);
