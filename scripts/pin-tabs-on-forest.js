@@ -58,11 +58,17 @@ const appendIcon = (button, isPinned) => {
   button.innerHTML = icon;
 };
 
+let originalSections;
 const sortSections = async () => {
   const pinnedSections = [];
   const unpinnedSections = [];
   const sidebar = getSidebar();
-  const sections = getSections(sidebar);
+
+  if (!originalSections) {
+    originalSections = getSections(sidebar);
+  }
+
+  const sections = originalSections;
 
   for (const section of sections) {
     const isPinned = await getIsSectionPinned(section);
