@@ -14,19 +14,19 @@
 
 // ==/UserScript==
 
-GM_addStyle('.spendesk-not-fav, .spendesk-fav { color: gold !important; }');
+GM_addStyle('.spendesk-not-pinned, .spendesk-pinned { color: gold !important; }');
 GM_addStyle(
-  '.spendesk-not-fav:hover, .spendesk-fav:hover { color: goldenrod !important; }'
+  '.spendesk-not-pinned:hover, .spendesk-pinned:hover { color: goldenrod !important; }'
 );
 GM_addStyle(
-  '.spendesk-fav-button { background: transparent; border: none; font-size: 8px; padding: 3px; position: absolute; right: 2px; top: 12px; }'
+  '.spendesk-pin-button { background: transparent; border: none; font-size: 8px; padding: 3px; position: absolute; right: 2px; top: 12px; }'
 );
-GM_addStyle('.spendesk-fav-button:hover { cursor: pointer; }');
+GM_addStyle('.spendesk-pin-button:hover { cursor: pointer; }');
 
 const DATA_ATTRIBUTE = 'data-pinned';
-const NOT_FAVORITE_ICON =
+const NOT_PINNED_ICON =
   '<i class="fa fa-star-o fa-2x spendesk-not-fav" role="button"></i>';
-const FAVORITE_ICON =
+const PINNED_ICON =
   '<i class="fa fa-star fa-2x spendesk-fav" role="button"></i>';
 
 const wait = (timeout) =>
@@ -42,7 +42,7 @@ const getSections = (sidebar) =>
 const getSectionName = (section) =>
   section.querySelector('.c-side-menu-item__name').textContent.trim();
 
-const getIcon = (isFilled) => (isFilled ? FAVORITE_ICON : NOT_FAVORITE_ICON);
+const getIcon = (isPinned) => (isPinned ? FAVORITE_ICON : NOT_FAVORITE_ICON);
 
 const getIsButtonCurrentlyPinned = (button) =>
   button.getAttribute(DATA_ATTRIBUTE) === '1';
