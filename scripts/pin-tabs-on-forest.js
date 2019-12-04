@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Pin tabs on forest
 // @namespace    https://spendesk.com
-// @updateURL    https://raw.githubusercontent.com/Spendesk/tampermonkey-scripts/master/scripts/pin-tab-forest.js
-// @downloadURL  https://raw.githubusercontent.com/Spendesk/tampermonkey-scripts/master/scripts/pin-tab-forest.js
+// @updateURL    https://raw.githubusercontent.com/Spendesk/tampermonkey-scripts/master/scripts/pin-tabs-on-forest.js
+// @downloadURL  https://raw.githubusercontent.com/Spendesk/tampermonkey-scripts/master/scripts/pin-tabs-on-forest.js
 // @version      0.1
 // @description  Add ability to pin tabs on forest in the sidebar
 // @author       Spendesk
