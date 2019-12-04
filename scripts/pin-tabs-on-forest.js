@@ -23,7 +23,6 @@ GM_addStyle(
 );
 GM_addStyle('.spendesk-pin-button:hover { cursor: pointer; }');
 
-const DATA_ATTRIBUTE = 'data-pinned';
 const NOT_PINNED_ICON =
   '<i class="fa fa-star-o fa-2x spendesk-not-pinned" role="button"></i>';
 const PINNED_ICON =
@@ -44,45 +43,52 @@ const getSectionName = (section) =>
 
 const getIcon = (isPinned) => (isPinned ? PINNED_ICON : NOT_PINNED_ICON);
 
-const getIsButtonCurrentlyPinned = (button) =>
-  button.getAttribute(DATA_ATTRIBUTE) === '1';
+const getIsSectionPinned = (section) => {
+  const name = getSectionName(section);
+  return GM_getValue(name, false);
+};
+
+const setSectionPin = (section, isPinned) => {
+  const name = getSectionName(section);
+  return GM_setValue(name, isPinned);
+};
 
 const appendIcon = (button, isPinned) => {
   const icon = getIcon(isPinned);
   button.innerHTML = icon;
-  button.setAttribute(DATA_ATTRIBUTE, isPinned ? '1' : '0');
 };
 
-const sortSections = () => {
+const sortSections = async () => {
   const pinnedSections = [];
   const unpinnedSections = [];
   const sidebar = getSidebar();
   const sections = getSections(sidebar);
 
-  sections.forEach((section) => {
-    const button = section.querySelector('button');
-    const hasBeenPinned = getIsButtonCurrentlyPinned(button);
-    if (hasBeenPinned) {
+  for (const section of sections) {
+    const isPinned = await getIsSectionPinned(section);
+    if (isPinned) {
       pinnedSections.push(section);
     } else {
       unpinnedSections.push(section);
     }
-  });
+  }
+
+  debugger;
 
   [...pinnedSections, ...unpinnedSections].forEach((section) =>
     sidebar.querySelector('.c-side-menu__list').appendChild(section)
   );
 };
 
-const togglePin = (event) => {
+const handleTogglePin = async (event) => {
   const button = event.currentTarget;
   const section = button.parentElement;
-  const hasBeenPinned = !getIsButtonCurrentlyPinned(button);
+  const isPinned = await getIsSectionPinned(section);
 
-  appendIcon(button, hasBeenPinned);
+  await setSectionPin(section, !isPinned)
 
-  const name = getSectionName(section);
-  GM_setValue(name, hasBeenPinned);
+  appendIcon(button, !isPinned);
+
   sortSections();
 };
 
@@ -91,10 +97,9 @@ const insertPinIcon = async (section) => {
   section.style.position = 'relative';
   button.type = 'button';
   button.classList.add('spendesk-pin-button');
-  button.addEventListener('click', togglePin);
+  button.addEventListener('click', handleTogglePin);
 
-  const name = getSectionName(section);
-  const isPinned = await GM_getValue(name);
+  const isPinned = await getIsSectionPinned(section);
 
   appendIcon(button, isPinned);
 
@@ -106,7 +111,7 @@ const addPinIcons = async (sidebar) => {
   for (const section of sections) {
     await insertPinIcon(section);
   }
-  sortSections();
+  await sortSections();
 };
 
 const main = async () => {
