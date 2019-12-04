@@ -73,8 +73,6 @@ const sortSections = async () => {
     }
   }
 
-  debugger;
-
   [...pinnedSections, ...unpinnedSections].forEach((section) =>
     sidebar.querySelector('.c-side-menu__list').appendChild(section)
   );
