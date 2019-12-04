@@ -71,8 +71,8 @@ const sortSections = async () => {
   const sections = originalSections;
 
   for (const section of sections) {
-    const isPinned = await getIsSectionPinned(section);
-    if (isPinned) {
+    const isSectionPinned = await getIsSectionPinned(section);
+    if (isSectionPinned) {
       pinnedSections.push(section);
     } else {
       unpinnedSections.push(section);
@@ -87,11 +87,11 @@ const sortSections = async () => {
 const handleTogglePin = async (event) => {
   const button = event.currentTarget;
   const section = button.parentElement;
-  const isPinned = await getIsSectionPinned(section);
+  const isSectionPinned = await getIsSectionPinned(section);
 
-  await setSectionPin(section, !isPinned)
+  await setSectionPin(section, !isSectionPinned)
 
-  appendIcon(button, !isPinned);
+  appendIcon(button, !isSectionPinned);
 
   sortSections();
 };
@@ -103,9 +103,9 @@ const insertPinIcon = async (section) => {
   button.classList.add('spendesk-pin-button');
   button.addEventListener('click', handleTogglePin);
 
-  const isPinned = await getIsSectionPinned(section);
+  const isSectionPinned = await getIsSectionPinned(section);
 
-  appendIcon(button, isPinned);
+  appendIcon(button, isSectionPinned);
 
   section.appendChild(button);
 };
