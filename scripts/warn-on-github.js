@@ -6,7 +6,7 @@
 // @version      0.4
 // @description  try to take over the world!
 // @author       Spendesk
-// @match        *github.com/Spendesk/spendesk/pull/*
+// @match        *github.com/Spendesk/*/pull/*
 // @grant        none
 // @icon         https://www.spendesk.com/favicon-32x32.png
 // ==/UserScript==
@@ -188,7 +188,7 @@ async function wait(ms) {
 
 async function repeatAddMessageIfError() {
   addMessageIfError();
-  await wait(2000);
+  await wait(500);
   repeatAddMessageIfError();
 }
 
