@@ -104,7 +104,7 @@ const addButton = async (valuesAlreadySet, nbTries = 0) => {
     buttonNode.style.padding = "3px";
     buttonNode.style.borderRadius = "2px";
     buttonNode.style.backgroundColor = "white";
-    buttonNode.addEventListener("click", handleInfo, false); //where func is your function name
+    buttonNode.addEventListener("click", handleInfo, false);
 
     return true;
   } catch (e) {
