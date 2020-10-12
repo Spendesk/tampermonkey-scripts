@@ -33,7 +33,7 @@ const filter = () => {
 };
 
 const addSidebarSearch = (sidebar) => {
-  const button = `
+  const htmlSearchbar = `
 <div class='c-beta-header__search-bar c-beta-search-bar ember-view' style='margin-top: 5px; margin-bottom: 5px;'>
 <i class='material-icons c-beta-search-bar__icon' role='button' data-ember-action=''>search</i>
 <form class='c-beta-search-bar__form' data-ember-action=''>
@@ -41,11 +41,13 @@ const addSidebarSearch = (sidebar) => {
 </form>
 </div>`;
 
-  sidebar.innerHTML = button + sidebar.innerHTML;
-  const domButton = document.querySelector('#filterSearchBar');
-  domButton.addEventListener('keyup', filter);
+  const domSearchBarDiv = document.createElement('div');
+  domSearchBarDiv.innerHTML = htmlSearchbar;
+  sidebar.prepend(domSearchBarDiv);
+  const domSearchBar = document.querySelector('#filterSearchBar');
+  domSearchBar.addEventListener('keyup', filter);
 
-  domButton.focus();
+  domSearchBar.focus();
 };
 
 const main = async () => {
