@@ -3,7 +3,7 @@
 // @namespace    https://spendesk.com
 // @updateURL    https://raw.githubusercontent.com/Spendesk/tampermonkey-scripts/master/scripts/filter-on-forest.js
 // @downloadURL  https://raw.githubusercontent.com/Spendesk/tampermonkey-scripts/master/scripts/filter-on-forest.js
-// @version      0.2
+// @version      0.3
 // @description  Add a filter on forest for the sidebar
 // @author       Spendesk
 // @match        *://app.forestadmin.com/*
