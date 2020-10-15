@@ -32,6 +32,21 @@ const filter = () => {
   }
 };
 
+const clearSearchbar = () => {
+  const searchbar = document.querySelector("#filterSearchBar");
+  searchbar.value = "";
+  filter();
+  searchbar.focus();
+};
+
+const addClearSearchbarListener = () => {
+  const sideMenuItems = document.querySelectorAll(".c-side-menu-item");
+  for (const sideMenuItem of sideMenuItems) {
+    const sideMenuDiv = sideMenuItem.parentElement;
+    sideMenuDiv.addEventListener("click", clearSearchbar);
+  }
+};
+
 const addSidebarSearch = (sidebar) => {
   const htmlSearchbar = `
   <div class="c-beta-header__search-bar c-beta-search-bar" style="margin-top: 5px; margin-bottom: 5px;">
@@ -47,6 +62,7 @@ const addSidebarSearch = (sidebar) => {
   sidebar.prepend(domSearchBarDiv);
   const domSearchBar = document.querySelector("#filterSearchBar");
   domSearchBar.addEventListener("keyup", filter);
+  addClearSearchbarListener();
 
   domSearchBar.focus();
 };
