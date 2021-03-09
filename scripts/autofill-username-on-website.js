@@ -3,12 +3,14 @@
 // @namespace    https://spendesk.com
 // @updateURL    https://raw.githubusercontent.com/Spendesk/tampermonkey-scripts/master/scripts/autofill-username-on-website.js
 // @downloadURL  https://raw.githubusercontent.com/Spendesk/tampermonkey-scripts/master/scripts/autofill-username-on-website.js
-// @version      0.2
+// @version      0.3
 // @description  Autofill username and password field for spendesk login
 // @author       Spendesk
 // @match        *://staging.spendesk.com/auth/login*
 // @match        *://dev.spendesk.com/auth/login*
 // @match        *://*.spendesk.spx/auth/login*
+// @match        *://*.local.app.spendesk.dev/auth/login*
+// @match        *://*.local.spendesk.dev/auth/login*
 // @icon         https://www.spendesk.com/favicon-32x32.png
 // @grant GM_setValue
 // @grant GM_getValue
