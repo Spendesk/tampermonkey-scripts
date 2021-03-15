@@ -11,6 +11,7 @@
 // @match        *://*.spendesk.spx/auth/login*
 // @match        *://*.local.app.spendesk.dev/auth/login*
 // @match        *://*.local.spendesk.dev/auth/login*
+// @match        *://*.app-desktop--staging--staging.branch.linc-preview.sh/auth/login*
 // @icon         https://www.spendesk.com/favicon-32x32.png
 // @grant GM_setValue
 // @grant GM_getValue
