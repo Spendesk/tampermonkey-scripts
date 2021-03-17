@@ -3,39 +3,62 @@
 // @namespace    https://spendesk.com
 // @updateURL    https://raw.githubusercontent.com/Spendesk/tampermonkey-scripts/master/scripts/autofill-username-on-website.js
 // @downloadURL  https://raw.githubusercontent.com/Spendesk/tampermonkey-scripts/master/scripts/autofill-username-on-website.js
-// @version      0.2
+// @version      0.3
 // @description  Autofill username and password field for spendesk login
 // @author       Spendesk
 // @match        *://staging.spendesk.com/auth/login*
 // @match        *://dev.spendesk.com/auth/login*
 // @match        *://*.spendesk.spx/auth/login*
+// @match        *://*.local.app.spendesk.dev/auth/login*
+// @match        *://*.local.spendesk.dev/auth/login*
+// @match        *://*.app-desktop--staging--staging.branch.linc-preview.sh/auth/login*
 // @icon         https://www.spendesk.com/favicon-32x32.png
 // @grant GM_setValue
 // @grant GM_getValue
 
 // ==/UserScript==
 
-const findReactFromDOMNode = function (dom) {
+const findReactFromDOMNode = function (dom, nbTries = 0) {
+  console.log({ nbTriesFindNode: nbTries });
+  if (nbTries > 5) return;
   let key = Object.keys(dom).find((key) =>
     key.startsWith("__reactInternalInstance$")
   );
   let internalInstance = dom[key];
-  if (internalInstance == null) return null;
+  if (internalInstance == null) {
+    return findReactFromDOMNode(dom, nbTries++);
+  }
 
+  let domNode;
   if (internalInstance.return) {
     // react 16+
-    return internalInstance._debugOwner
+    domNode = internalInstance._debugOwner
       ? internalInstance._debugOwner.stateNode
       : internalInstance.return.stateNode;
   } else {
     // react <16
-    return internalInstance._currentElement._owner._instance;
+    domNode = internalInstance._currentElement._owner._instance;
   }
+  console.log({ domNode });
+  return domNode ?? findReactFromDOMNode(dom, nbTries++);
 };
 
-const prefill = (name, defaultMatch, password) => {
-  const mailInput = document.querySelector('input[placeholder="Email"]');
-  const form = document.querySelector(".LoginPasswordForm");
+const asyncFindDomElement = async (selector, nbTries = 0) => {
+  console.log("trying to find element", { selector, nbTries });
+  const element = document.querySelector(selector);
+  if (!element) {
+    await wait(500);
+    return asyncFindDomElement(selector, nbTries++);
+  }
+  return element;
+};
+
+const prefill = async (name, defaultMatch, password) => {
+  console.log("trying to prefill");
+  const mailInput = await asyncFindDomElement('input[placeholder="Email"]');
+  console.log("mailInput found");
+  const form = await asyncFindDomElement(".LoginPasswordForm");
+  console.log("form found");
 
   let automatch = "";
   if (location.host === "staging.spendesk.com") {
@@ -44,16 +67,21 @@ const prefill = (name, defaultMatch, password) => {
     automatch = defaultMatch;
   }
 
-  findReactFromDOMNode(form).setState({
+  console.log("trying to find reactFromDOMNode");
+  const formDomNode = findReactFromDOMNode(form);
+  console.log({ formDomNode, name, automatch, password });
+  formDomNode.setState({
     email: `${name}+${automatch}@spendesk.com`,
     password,
   });
 
+  console.log("selecting range");
   mailInput.setSelectionRange(
     name.length + 1,
     name.length + 1 + automatch.length
   );
 
+  console.log("focusing");
   mailInput.focus();
 };
 
@@ -84,6 +112,7 @@ const handleInfo = async () => {
 
 const addButton = async (valuesAlreadySet, nbTries = 0) => {
   if (nbTries > 5) return false;
+  console.log({ nbTries });
   try {
     const layout = document.querySelector("#layout-login");
     if (!layout) {
@@ -132,6 +161,8 @@ const addButton = async (valuesAlreadySet, nbTries = 0) => {
       return;
     }
 
-    if (valuesAlreadySet) prefill(name, defaultMatch, password);
+    if (valuesAlreadySet) {
+      await prefill(name, defaultMatch, password);
+    }
   }, 100);
 })();
